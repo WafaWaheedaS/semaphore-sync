@@ -1,0 +1,30 @@
+
+
+
+
+
+****Sleeping Barber****
+ *  + use 1 thread for the barber and CUSTOMERS threads for the customers
+ *  + use 4 semaphores to synchronise the threads:
+ *     - waiting_room: to manage the customers queue (initialise to CHAIRS)
+ *     - mutex_chair: to grant mutually exclusive access to the chair (init 1)
+ *     - barber_ready: to let the barber sleep until a customer arrives (init 0)
+ *     - customer_ready: to let the customer wait until the barber finishes (init 0)
+/* 
+   Usage:
+   sleeping_barber <customers> <chairs>
+   Example: sleeping_barber 10 5; means: there are 10 customers and 5 waiting chairs in the 
+   barber shop
+
+*/
+
+gcc barber.c -o barber -lpthread -lm
+# -lm  - used for math library
+# -pthread tells the compiler to link in the pthread library as well as configure the compilation for threads.
+# -lpthread option only causes the pthread library to be linked - the pre-defined macros don't get defined.
+
+
+macro is a fragment of code which has been given a name. Whenever the name is used, it is replaced by the contents of the macro. There are two kinds of macros. They differ mostly in what they look like when they are used. Object-like macros resemble data objects when used, function-like macros resemble function calls.
+
+You may define any valid identifier as a macro, even if it is a C keyword. The preprocessor does not know anything about keywords.
+

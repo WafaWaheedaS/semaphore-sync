@@ -1,9 +1,11 @@
+
 #include<semaphore.h>   // using semaphore headerfile to create functions for synchronization problems using semaphore..
 
-sem_t aArrived;
-sem_t bArrived;
+
 
 //***Rendezvous Functions ***
+sem_t aArrived;
+sem_t bArrived;
 void rendezvous(){
     //initializes semaphore and does error handling
     if(sem_init(&aArrived,0,0)==-1){
@@ -19,7 +21,6 @@ void rendez_a_wait(){
     sem_post(&aArrived);
     sem_wait(&bArrived);
 }
-
 
 void rendez_b_wait(){
     //rendezvous thread 2 wait
@@ -47,7 +48,6 @@ void mutex_signal(){
 }
 
 
-
 //*** Multiplex Functions ***
 sem_t smultiplex;
 
@@ -65,7 +65,6 @@ void multiplex_wait(){
 void multiplex_signal(){
     sem_post(&smultiplex);
 }
-
 
 
 //*** Queues Functions***
@@ -128,32 +127,71 @@ void fqueues_wait(){
 void fqueues_signal(){
     sem_post(&sqrend);
 }
-33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
-
 
 
 //*** Barrier ***
 
 
-sem_t smultiplex;
+// Haya's part..
 
-void multiplex(int n){
 
-    if(sem_init(&smultiplex,0,n)==-1){
-        perror("error initilalizing semaphore for multiplex\n");
-    }
+//*** Synchronization Problem - Sleeping Barber***
+
+sem_t waitingRoom; // Signal that the waiting room can accommodate  customers
+sem_t barberSeat; // Signal to ensure exclusive access to the barber seat
+sem_t doneWithCustomer; // Signals the customer that the barber is done with him/her
+sem_t barberBed; // Signal to wake up the barber
+
+void sbarber(int numWaitingChairs){
+    // Initialize the semaphores 
+    if(sem_init(&waitingRoom, 0, numWaitingChairs)==-1){
+        perror("error initilalizing semaphore for waiting room\n");
+    }      
+    if(sem_init(&barberSeat, 0, 1)==-1)
+    {
+        perror("error initilalizing semaphore for barber seat\n");
+    } 
+    if(sem_init(&doneWithCustomer, 0, 0)==-1)
+    {
+        perror("error initilalizing semaphore for done customer\n");
+    } 
+    if(sem_init(&barberBed, 0, 0)==-1)
+    {
+        perror("error initilalizing semaphore for barber bed\n");
+    } 
 }
 
-void multiplex_wait(){
-    sem_wait(&smultiplex);
+void sbarber_bed_wait(){
+    sem_wait(&barberBed); // barber sleeping
 }
 
-void multiplex_signal(){
-    sem_post(&smultiplex);
+void sbarber_bed_signal(){
+     sem_post(&barberBed); // Wake up barber
 }
 
+void sbarber_doneCust_wait(){
+    sem_wait(&doneWithCustomer);
+}
 
+void sbarber_doneCust_signal(){
+    sem_post(&doneWithCustomer);
+}
 
+void sbarber_waitingRoom_wait(){
+    sem_wait(&waitingRoom);
+}
+
+void sbarber_waitingRoom_signal(){
+    sem_post(&waitingRoom);
+}
+
+void sbarber_bSeat_wait(){
+    sem_wait(&barberSeat); // Wait for the barber to become free
+}
+
+void sbarber_bSeat_signal(){
+    sem_post(&barberSeat); // Give up seat
+} 
 
 
 

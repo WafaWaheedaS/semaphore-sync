@@ -1,6 +1,6 @@
-#include<pthread.h>
-#include<stdio.h>
-#include</home/haya/semt1/semlib.h>
+#include <pthread.h>
+#include <stdio.h>
+#include </home/haya/semt1/semlib.h>
 
 void *thr_fn(void *arg);
 

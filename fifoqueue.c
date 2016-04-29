@@ -56,10 +56,10 @@ void squeues2_signal(){
 
 
 void squeues2_wait(sem_t mySem){
-	pos++;
  	sem_wait(&sqmutex2);
     squeues2[pos]=mySem;
-    printf("printging pos:%d", pos);    
+    //printf("printging pos:%d \n", pos); 
+    pos++;   
     sem_post(&sqmutex2);
     printf("sem wait entering...\n");
    // printf("printing sem.. %s", mySem);
@@ -83,7 +83,9 @@ printf("starting thread fn....\n");
     if(sem_init(&mySem,0,0)==-1){
         perror("error initilalizing semaphore for queues\n");
     }
-squeues2_wait(mySem);
+    printf("queue in wait..\n");
+    squeues2_wait(mySem);
+    printf("queue out of wait..\n");
     /**sem_wait(&sqmutex2);
     squeues2[pos]=mySem;
     pos++;
