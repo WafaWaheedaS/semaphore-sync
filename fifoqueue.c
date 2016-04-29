@@ -1,6 +1,6 @@
-#include<semaphore.h>
-#include<pthread.h> //debate
-#include<stdio.h>
+#include <semaphore.h>
+#include <pthread.h> //debate
+#include <stdio.h>
 
 
 // #include</home/wafa/semt1/semlib.h> // importing the library for synchronisation using semaphores from path

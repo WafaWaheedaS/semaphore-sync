@@ -1,9 +1,9 @@
-#include<semaphore.h>
-#include<pthread.h>
-#include<stdio.h>
+#include <semaphore.h>
+#include <pthread.h>
+#include <stdio.h>
 
 
-#include</home/wafa/semt1/semlib.h> // importing the library for synchronisation using semaphores from path
+#include "semlib.h" // importing the library for synchronisation using semaphores from path
 
 
 void *leader_fn(void *arg);

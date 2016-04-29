@@ -1,7 +1,7 @@
 
-#include<pthread.h>
-#include<stdio.h>
-#include</home/wafa/semt1/semlib.h> // importing the library for synchronisation using semaphores from path
+#include <pthread.h>
+#include <stdio.h>
+#include "semlib.h" // importing the library for synchronisation using semaphores from path
 
 void *thrA_fn(void *arg);
 void *thrB_fn(void *arg);

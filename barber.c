@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <math.h>
 
-#include </home/wafa/semt1/semlib.h> // Our semaphore library - header file;
+#include "semlib.h" // Our semaphore library - header file;
 
 #define TRUE 1
 #define FALSE 0
