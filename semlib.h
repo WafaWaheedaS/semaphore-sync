@@ -193,7 +193,87 @@ void sbarber_bSeat_signal(){
     sem_post(&barberSeat); // Give up seat
 } 
 
+//*** Barrier ***
 
+int bCount=0;
+int bTotal;
+sem_t sbarrier, bmutex;
+
+void barrier(int n){
+    bTotal=n;
+
+    if(sem_init(&sbarrier,0,0)==-1){
+        perror("error initilalizing semaphore for multiplex\n");
+    }
+    if(sem_init(&bmutex,0,1)==-1){
+        perror("error initilalizing semaphore for multiplex\n");
+    }
+
+}
+
+void barrier_wait(){
+
+    sem_wait(&bmutex);
+    bCount++;
+    sem_post(&bmutex);
+
+    if(bCount==bTotal)
+        sem_post(&sbarrier);
+
+    sem_wait(&sbarrier);
+    sem_post(&sbarrier);
+}
+
+
+//*** Reusable Barrier ***
+
+int rbCount, rbTotal,i;
+sem_t rbMutex, turnstile, turnstile2;
+
+void reusable_barrier(int n){
+
+    rbCount=0;
+    rbTotal=n;
+
+    if(sem_init(&rbMutex,0,1)==-1){
+        perror("error initilalizing semaphore for multiplex\n");
+    }
+    if(sem_init(&turnstile,0,0)==-1){
+        perror("error initilalizing semaphore for multiplex\n");
+    }
+    if(sem_init(&turnstile2,0,1)==-1){
+        perror("error initilalizing semaphore for multiplex\n");
+    }
+}
+
+void phase1(){
+    sem_wait(&rbMutex);
+    rbCount++;
+    if(rbCount==rbTotal){
+        for(i=0;i<rbTotal;i++){
+            sem_post(&turnstile);
+        }
+    }
+    sem_post(&rbMutex);
+    sem_wait(&turnstile);
+}
+
+void phase2(){
+    sem_wait(&rbMutex);
+    rbCount--;
+    if(rbCount==0){
+        for(i=0;i<rbTotal;i++){
+            sem_post(&turnstile2);
+        }
+    }
+    sem_post(&rbMutex);
+    sem_wait(&turnstile2);
+}
+
+void reusable_barrier_wait(){
+    phase1();
+    phase2();
+}
 
 //*** FIFO Queues ***
 
