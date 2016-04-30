@@ -69,7 +69,7 @@ void *server_fn(void *arg){
 	while(pos != 0){
         count++;
 		squeues2_signal();
-		printf("finished processing thread %u..\n",(unsigned)pthread_self() );
+		printf("finished processing thread..\n");
 	}}
 	return((void *)0);//return(NULL);
 }
