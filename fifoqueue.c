@@ -1,5 +1,5 @@
 #include <semaphore.h>
-#include <pthread.h> 
+#include <pthread.h>
 #include <stdio.h>
 
 
@@ -8,16 +8,16 @@ void *server_fn(void *arg);  // controller for ordering - calling threads in fif
 
 sem_t squeues2[100];
 sem_t sqmutex2;
-int pos;
-
+int pos, count=0;
+int numThreads=5;
 int main(){
 
 fprintf(stderr,"FIFO Queue starts\n");
 
-int numThreads=5;
-int i;
-pthread_t thr[numThreads], serverThr;  // creating threads using pthread.h 
 
+int i;
+pthread_t thr[numThreads], serverThr;  // creating threads using pthread.h
+count=0;
 pos = 0;
 
     if(sem_init(&sqmutex2,0,1)==-1){
@@ -53,10 +53,10 @@ void squeues2_signal(){
 }
 
 void squeues2_wait(sem_t mySem){
-    
+
     sem_wait(&sqmutex2);
     squeues2[pos]=mySem;
-    pos++;   
+    pos++;
     sem_post(&sqmutex2);
    // printf("printing sem.. %s", mySem);
     sem_wait(&mySem);
@@ -65,10 +65,13 @@ void squeues2_wait(sem_t mySem){
 
 
 void *server_fn(void *arg){
+	while(count<numThreads){
 	while(pos != 0){
+        count++;
 		squeues2_signal();
 		printf("finished processing thread %u..\n",(unsigned)pthread_self() );
-	}
+	}}
+	return((void *)0);//return(NULL);
 }
 
 void *thr_fn(void *arg){
@@ -79,4 +82,5 @@ void *thr_fn(void *arg){
 
     printf("Created a thread %u successfully \n", (unsigned)pthread_self());
     squeues2_wait(mySem);
+    return((void *)0);//return(NULL);
 }
