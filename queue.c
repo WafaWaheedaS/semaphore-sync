@@ -14,10 +14,10 @@ fprintf(stderr,"Queues start..\n");
 
 int numThreads=5;
 int i;
-pthread_t f[numThreads];  // creating thread 1 & 2 using pthread.h 
+pthread_t f[numThreads];
 pthread_t l[numThreads];
 
-queues(); // calling rendezvous function from semlib.h
+queues();
 
 for (i=0;i<numThreads;i++){
     if(pthread_create(&l[i], NULL, leader_fn, NULL)==-1){
@@ -51,6 +51,7 @@ return((void *)0);//return(NULL);
 void *follower_fn(void *arg){
 fqueues_wait();
 printf("I am dancing with a leader... \n");
+sleep(2);
 fqueues_signal();
 printf("I am done dancing...\n");
 return((void *)0);//return(NULL);
