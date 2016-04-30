@@ -4,18 +4,17 @@
 
 void *thr_fn(void *arg);
 
-int count = 0 ;
-
 int main(){
 
 fprintf(stderr,"Main start\n");
 
-int numThreads=3;
-int i,j;
+int numThreads=5;
+int allowedThr=3;
+int i;
 
 pthread_t thread[numThreads];
 
-mutex();
+multiplex(allowedThr);
 
 for (i=0;i<numThreads;i++){
     if(pthread_create(&thread[i], NULL, thr_fn, NULL)==-1){
@@ -23,8 +22,8 @@ for (i=0;i<numThreads;i++){
     }
 }
 
-for (j=0;j<numThreads;j++){
-    pthread_join(thread[j], NULL);
+for (i=0;i<numThreads;i++){
+    pthread_join(thread[i], NULL);
 }
 
 
@@ -32,11 +31,12 @@ for (j=0;j<numThreads;j++){
 
 void *thr_fn(void *arg){
 
-mutex_wait();
+multiplex_wait();
 
-count++;
-printf("%d: Entering critical section\n",count);
-mutex_signal();
-printf("Exiting critical section.\n");
+printf("I am thread %u: Entering critical section\n",(unsigned)pthread_self());
+sleep(2);
+
+multiplex_signal();
+printf("%u: Exiting critical section.\n",(unsigned)pthread_self());
 return((void *)0);//return(NULL);
 }
