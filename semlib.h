@@ -4,8 +4,10 @@
 
 
 //***Rendezvous Functions ***
+
 sem_t aArrived;
 sem_t bArrived;
+
 void rendezvous(){
     //initializes semaphore and does error handling
     if(sem_init(&aArrived,0,0)==-1){
@@ -81,10 +83,10 @@ void queues(){
 
     if(sem_init(&slqueues,0,0)==-1){
         perror("error initilalizing semaphore for leader queues\n");
-    }    
+    }
     if(sem_init(&sfqueues,0,0)==-1){
         perror("error initilalizing semaphore for queues\n");
-    }    
+    }
     if(sem_init(&sqmutex,0,1)==-1){
         perror("error initilalizing semaphore for queues\n");
     }
@@ -129,12 +131,6 @@ void fqueues_signal(){
 }
 
 
-//*** Barrier ***
-
-
-// Haya's part..
-
-
 //*** Synchronization Problem - Sleeping Barber***
 
 sem_t waitingRoom; // Signal that the waiting room can accommodate  customers
@@ -143,22 +139,22 @@ sem_t doneWithCustomer; // Signals the customer that the barber is done with him
 sem_t barberBed; // Signal to wake up the barber
 
 void sbarber(int numWaitingChairs){
-    // Initialize the semaphores 
+    // Initialize the semaphores
     if(sem_init(&waitingRoom, 0, numWaitingChairs)==-1){
         perror("error initilalizing semaphore for waiting room\n");
-    }      
+    }
     if(sem_init(&barberSeat, 0, 1)==-1)
     {
         perror("error initilalizing semaphore for barber seat\n");
-    } 
+    }
     if(sem_init(&doneWithCustomer, 0, 0)==-1)
     {
         perror("error initilalizing semaphore for done customer\n");
-    } 
+    }
     if(sem_init(&barberBed, 0, 0)==-1)
     {
         perror("error initilalizing semaphore for barber bed\n");
-    } 
+    }
 }
 
 void sbarber_bed_wait(){
@@ -191,7 +187,7 @@ void sbarber_bSeat_wait(){
 
 void sbarber_bSeat_signal(){
     sem_post(&barberSeat); // Give up seat
-} 
+}
 
 //*** Barrier ***
 
