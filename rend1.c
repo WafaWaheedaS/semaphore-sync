@@ -10,7 +10,7 @@ int main(){
 
 fprintf(stderr,"Rendezvous start..\n");
 
-pthread_t a;  // creating thread 1 & 2 using pthread.h 
+pthread_t a;  // creating thread 1 & 2 using pthread.h
 pthread_t b;
 
 rendezvous(); // calling rendezvous function from semlib.h
@@ -26,10 +26,9 @@ if( pthread_create(&b, NULL, thrB_fn, NULL)==-1){
 }
 
 pthread_join(a, NULL); // using pthread.h join --- tells processor main to wait for threads to finsh executing..
-    
+
 pthread_join(b,NULL);
 
-fprintf(stderr,"Main end\n");
 
 }
 
