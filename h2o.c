@@ -1,9 +1,9 @@
 
 //A C PROGRAM TO IMPLEMENT THE H2O PROBLEM USING SEMAPHORES
-#include<pthread.h>
-#include<stdio.h>
-#include<semaphore.h>
-#include</home/haya/semt1/semlib.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <semaphore.h>
+#include "semlib.h"
 
 sem_t smutex,oxyQueue,hydroQueue;
 

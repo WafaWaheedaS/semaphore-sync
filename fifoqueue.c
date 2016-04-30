@@ -1,13 +1,10 @@
 #include <semaphore.h>
-#include <pthread.h> //debate
+#include <pthread.h> 
 #include <stdio.h>
 
 
-// #include</home/wafa/semt1/semlib.h> // importing the library for synchronisation using semaphores from path
-
-
 void *thr_fn(void *arg);
-void *server_fn(void *arg);
+void *server_fn(void *arg);  // controller for ordering - calling threads in fifo order
 
 sem_t squeues2[100];
 sem_t sqmutex2;
@@ -15,7 +12,7 @@ int pos;
 
 int main(){
 
-fprintf(stderr,"Queues start..\n");
+fprintf(stderr,"FIFO Queue starts\n");
 
 int numThreads=5;
 int i;
@@ -26,16 +23,17 @@ pos = 0;
     if(sem_init(&sqmutex2,0,1)==-1){
         perror("error initilalizing semaphore for queues\n");
     }
- // calling rendezvous function from semlib.h
-printf("starting for ....\n");
+
+printf("Creating threads ....\n");
 for (i=0;i<numThreads;i++){
     if(pthread_create(&thr[i], NULL, thr_fn, NULL)==-1){
         printf("Error Creating thread a.\n");
     }
+    // printf("Created a thread %u successfully \n", (unsigned)pthread_self());
 }
 
 if(pthread_create(&serverThr, NULL, server_fn, NULL)==-1){
-        printf("Error Creating thread a.\n");
+        printf("Error Creating thread..\n");
     }
 
 for (i=0;i<numThreads;i++){
@@ -54,48 +52,31 @@ void squeues2_signal(){
 
 }
 
-
 void squeues2_wait(sem_t mySem){
- 	sem_wait(&sqmutex2);
+    
+    sem_wait(&sqmutex2);
     squeues2[pos]=mySem;
-    //printf("printging pos:%d \n", pos); 
     pos++;   
     sem_post(&sqmutex2);
-    printf("sem wait entering...\n");
    // printf("printing sem.. %s", mySem);
     sem_wait(&mySem);
-    printf("sem wait exiting...\n");
 
 }
+
 
 void *server_fn(void *arg){
 	while(pos != 0){
 		squeues2_signal();
-		printf("finish processing thread..\n");
+		printf("finished processing thread %u..\n",(unsigned)pthread_self() );
 	}
 }
 
 void *thr_fn(void *arg){
-printf("starting thread fn....\n");
-
 	sem_t mySem;
-
     if(sem_init(&mySem,0,0)==-1){
         perror("error initilalizing semaphore for queues\n");
     }
-    printf("queue in wait..\n");
+
+    printf("Created a thread %u successfully \n", (unsigned)pthread_self());
     squeues2_wait(mySem);
-    printf("queue out of wait..\n");
-    /**sem_wait(&sqmutex2);
-    squeues2[pos]=mySem;
-    pos++;
-    sem_post(&sqmutex2);
-    printf("sem wait entering...\n");
-    sem_wait(&mySem);
-    printf("sem wait exiting...\n"); **/
-
-printf("Executing queue -- i am entering.. \n");
-//squeues2_signal();
-
-printf("Executing queue -- i am exit.. \n");
 }
